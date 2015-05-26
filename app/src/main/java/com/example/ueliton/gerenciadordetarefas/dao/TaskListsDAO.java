@@ -63,12 +63,34 @@ public class TaskListsDAO extends SQLiteOpenHelper{
         while(cursor.moveToNext()){
             TaskList taskLists = new TaskList();
             taskLists.setId(cursor.getLong(0));
-            String field = cursor.getString(1);
-            Log.d(TAG, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + cursor.getString(1));
             taskLists.setName(cursor.getString(1));
             aLotOfTaskLists.add(taskLists);
         }
 
         return aLotOfTaskLists;
+    }
+
+    public TaskList getTaskList(String taskName) {
+        String[] colums = {COLUM_ID, COLUM_NAME};
+        Cursor cursor = getWritableDatabase().query(TABLE_TASKLISTS,
+                colums, COLUM_NAME + " = " + taskName , null,null,null,null);
+
+        cursor.moveToNext();
+        TaskList taskList = new TaskList();
+        taskList.setId(cursor.getLong(0));
+        taskList.setName(cursor.getString(1));
+
+        return taskList;
+    }
+
+    public void update(TaskList taskList) {
+
+        ContentValues values = new ContentValues();
+
+        values.put(COLUM_ID, taskList.getId());
+        values.put(COLUM_NAME, taskList.getName());
+
+        String[] args = {taskList.getId().toString()};
+        getWritableDatabase().update(TABLE_TASKLISTS, values, "id=?",args );
     }
 }

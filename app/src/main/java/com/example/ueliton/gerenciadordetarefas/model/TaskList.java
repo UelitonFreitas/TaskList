@@ -1,12 +1,13 @@
 package com.example.ueliton.gerenciadordetarefas.model;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by Ueliton on 25/05/2015.
  */
-public class TaskList {
+public class TaskList implements Serializable {
     private Long id;
     private String name;
     private List<Task> listOfTasks;
@@ -39,5 +40,13 @@ public class TaskList {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public List<Task> getListOfTasks() {
+        return this.listOfTasks;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

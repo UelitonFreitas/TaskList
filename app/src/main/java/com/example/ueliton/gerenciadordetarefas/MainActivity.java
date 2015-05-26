@@ -32,9 +32,10 @@ public class MainActivity extends ActionBarActivity {
         taskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-                Toast.makeText(MainActivity.this,
-                        "Clique na posicao: " + position,
-                        Toast.LENGTH_LONG).show();
+                TaskList tasks = (TaskList) adapter.getItemAtPosition(position);
+                Intent taskFormActivity = new Intent(MainActivity.this, TaskListForm.class);
+                taskFormActivity.putExtra("selectedTasksList", tasks);
+                startActivity(taskFormActivity);
             }
         });
 

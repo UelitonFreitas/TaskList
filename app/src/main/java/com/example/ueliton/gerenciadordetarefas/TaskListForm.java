@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.ueliton.gerenciadordetarefas.dao.TaskListsDAO;
 import com.example.ueliton.gerenciadordetarefas.model.TaskList;
@@ -13,28 +14,43 @@ import com.example.ueliton.gerenciadordetarefas.model.TaskList;
 
 public class TaskListForm extends ActionBarActivity {
 
+    FormHelper formHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
 
-        Button buttonSave = (Button) findViewById(R.id.button_save_task_list);
+        EditText taskNameEdit = (EditText) findViewById(R.id.taskListName);
+        final Button buttonSave = (Button) findViewById(R.id.button_save_task_list);
+        formHelper = new FormHelper(TaskListForm.this);
+
+        final TaskList aTaskList = (TaskList) getIntent().getSerializableExtra("selectedTasksList");
+
+        if (aTaskList != null){
+            buttonSave.setText("Alterar");
+            formHelper.setTaskLists(aTaskList);
+        }
+
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FormHelper formHelper = new FormHelper(TaskListForm.this);
+
+                TaskList taskList = formHelper.getTasksLists();
+
                 TaskList tasks = formHelper.getTasksLists();
                 TaskListsDAO dao = new TaskListsDAO(TaskListForm.this);
-
-                dao.save(tasks);
+                if (aTaskList == null) {
+                    dao.save(tasks);
+                }
+                else {
+                    taskList.setId(aTaskList.getId());
+                    dao.update(taskList);
+                }
                 dao.close();
-
                 finish();
             }
         });
-
-        //Helper utilizado para obter dados do fomulario.
-
     }
 
     @Override
