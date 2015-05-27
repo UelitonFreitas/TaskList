@@ -19,16 +19,26 @@ import java.util.List;
  */
 public class TaskListsDAO extends SQLiteOpenHelper{
     private static final String name = "TaskList_db";
-    private static final int version = 3;
+    private static final int version = 4;
 
     private static final String TABLE_TASKLISTS = "taskLists";
+    private static final String TABLE_TASKITENS = "taskListsItens";
     private static final String COLUM_ID = "id";
+    private static final String COLUM_TASK_ID = "task_id";
     private static final String COLUM_NAME = "name";
     private String TAG  = "TaskListDAO";
 
 
     public TaskListsDAO(Context context) {
         super(context, name, null, version);
+    }
+
+
+    public void save(Long id, Task task) {
+        ContentValues values = new ContentValues();
+        values.put(COLUM_NAME, task.getName());
+        values.put(COLUM_TASK_ID, id);
+        getWritableDatabase().insert(TABLE_TASKITENS, null, values);
     }
 
     public void save(TaskList task) {
@@ -39,9 +49,15 @@ public class TaskListsDAO extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String ddl = "CREATE TABLE "+TABLE_TASKLISTS+" ("+COLUM_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        String ddl = "CREATE TABLE "+TABLE_TASKLISTS+" ("+COLUM_ID+
+                " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 " "+COLUM_NAME+" TEXT UNIQUE NOT NULL); ";
+        db.execSQL(ddl);
 
+        ddl = "CREATE TABLE "+TABLE_TASKITENS+" ("+COLUM_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "
+                +COLUM_NAME+" TEXT UNIQUE NOT NULL,"
+                +COLUM_TASK_ID+" INTEGER," +
+                "FOREIGN KEY("+COLUM_TASK_ID+") REFERENCES "+TABLE_TASKLISTS+"( "+COLUM_ID+" )); ";
         db.execSQL(ddl);
     }
 
@@ -91,6 +107,11 @@ public class TaskListsDAO extends SQLiteOpenHelper{
         values.put(COLUM_NAME, taskList.getName());
 
         String[] args = {taskList.getId().toString()};
-        getWritableDatabase().update(TABLE_TASKLISTS, values, "id=?",args );
+        getWritableDatabase().update(TABLE_TASKLISTS, values, "id=?", args);
+    }
+
+    public List<Task> getTaskItens() {
+
+        return null;
     }
 }

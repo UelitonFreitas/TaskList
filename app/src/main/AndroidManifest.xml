@@ -20,6 +20,10 @@
             android:name=".TaskListForm"
             android:label="@string/title_activity_new_task" >
         </activity>
+        <activity
+            android:name=".TaskItemForm"
+            android:label="@string/title_activity_task_item_form" >
+        </activity>
     </application>
 
 </manifest>

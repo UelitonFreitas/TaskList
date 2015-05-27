@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Ueliton on 25/05/2015.
  */
-public class FormHelper {
+public class TaskListFormHelper {
 
     ListView list;
     EditText editName;
@@ -21,9 +21,9 @@ public class FormHelper {
         return editName;
     }
 
-    public FormHelper(TaskListForm taskListForm) {
+    public TaskListFormHelper(TaskListForm taskListForm) {
         editName = (EditText) taskListForm.findViewById(R.id.taskListName);
-        list = (ListView) taskListForm.findViewById(R.id.taskList);
+        list = (ListView) taskListForm.findViewById(R.id.task_list_itens);
     }
 
     public Task getTask() {

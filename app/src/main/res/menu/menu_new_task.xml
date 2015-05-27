@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.ueliton.gerenciadordetarefas.TaskListForm">
 
-    <item android:id="@+id/new_task_list"
+    <item android:id="@+id/new_task_list_item"
         android:title="Nova Tarefa"
         android:icon="@drawable/ic_new"
         app:showAsAction="always"
