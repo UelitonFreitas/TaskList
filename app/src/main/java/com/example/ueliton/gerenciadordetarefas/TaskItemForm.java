@@ -40,26 +40,27 @@ public class TaskItemForm extends ActionBarActivity {
             taskHelper.setName(task.getName());
         }
 
-        task = taskHelper.getTask();
-
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TaskListsDAO dao = new TaskListsDAO(TaskItemForm.this);
+                taskHelper = new TaskItemFormHelper(TaskItemForm.this);
+                Task newTask = taskHelper.getTask();
+                newTask.setId(task.getId());
                 if (task != null){
-                    dao.update(task);
+                    dao.update(newTask);
                 }
                 else {
-                    dao.save(aTaskList.getId(), task);
+                    dao.save(aTaskList.getId(), newTask);
                 }
                 dao.close();
                 finish();
             }
         });
 
-       // TaskListsDAO dao = new TaskListsDAO(this);
-        //taskItens = dao.getTaskItens(aTaskList.getId());
-        //dao.close();
+        TaskListsDAO dao = new TaskListsDAO(this);
+        taskItens = dao.getTaskItens(aTaskList.getId());
+        dao.close();
     }
 
     protected void onResume() {

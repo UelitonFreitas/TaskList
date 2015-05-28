@@ -109,7 +109,7 @@ public class TaskAdapter extends BaseAdapter {
                     dao.close();
                     intent = new Intent(activity, TaskItemForm.class);
                     intent.putExtra("tasksList", taskList);
-                    intent.putExtra("task", tempValues);
+                    intent.putExtra("task", holder.task);
                     activity.startActivity(intent);
                 }
 
