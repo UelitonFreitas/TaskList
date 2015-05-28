@@ -1,5 +1,6 @@
 package com.example.ueliton.gerenciadordetarefas.model;
 
+
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,18 +8,24 @@ import java.util.List;
 /**
  * Created by Ueliton on 25/05/2015.
  */
-public class TaskList implements Serializable {
+public class TaskList implements Serializable{
     private Long id;
     private String name;
     private List<Task> listOfTasks;
+    private boolean done;
+
+    public void setDone(boolean done) {
+        this.done = done;
+    }
 
     public TaskList(String name) {
         this.name = name;
         this.listOfTasks = new LinkedList<Task>();
+        this.done = false;
     }
 
     public TaskList() {
-        //do nothing;
+        this.done = false;
     }
 
     public void addTask(Task aTask) {
@@ -48,5 +55,9 @@ public class TaskList implements Serializable {
 
     public Long getId() {
         return id;
+    }
+
+    public boolean getDone() {
+        return done;
     }
 }

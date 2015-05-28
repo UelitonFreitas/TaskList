@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class TaskListsDAO extends SQLiteOpenHelper{
     private static final String name = "TaskList_db";
-    private static final int version = 4;
+    private static final int version = 5;
 
     private static final String TABLE_TASKLISTS = "taskLists";
     private static final String TABLE_TASKITENS = "taskListsItens";
@@ -55,7 +55,7 @@ public class TaskListsDAO extends SQLiteOpenHelper{
         db.execSQL(ddl);
 
         ddl = "CREATE TABLE "+TABLE_TASKITENS+" ("+COLUM_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "
-                +COLUM_NAME+" TEXT UNIQUE NOT NULL,"
+                +COLUM_NAME+" TEXT NOT NULL,"
                 +COLUM_TASK_ID+" INTEGER," +
                 "FOREIGN KEY("+COLUM_TASK_ID+") REFERENCES "+TABLE_TASKLISTS+"( "+COLUM_ID+" )); ";
         db.execSQL(ddl);
@@ -64,6 +64,8 @@ public class TaskListsDAO extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         String ddl = "DROP TABLE IF EXISTS "+TABLE_TASKLISTS+";";
+        db.execSQL(ddl);
+        ddl = "DROP TABLE IF EXISTS "+TABLE_TASKITENS+";";
         db.execSQL(ddl);
 
         this.onCreate(db);
@@ -110,8 +112,32 @@ public class TaskListsDAO extends SQLiteOpenHelper{
         getWritableDatabase().update(TABLE_TASKLISTS, values, "id=?", args);
     }
 
-    public List<Task> getTaskItens() {
+    public void update(Task task) {
 
-        return null;
+        ContentValues values = new ContentValues();
+
+        values.put(COLUM_ID, task.getId());
+        values.put(COLUM_NAME, task.getName());
+
+        String[] args = {task.getId().toString()};
+        getWritableDatabase().update(TABLE_TASKITENS, values, "id=?", args);
+    }
+
+    public List<Task> getTaskItens(Long id) {
+
+        String[] colums = {COLUM_ID, COLUM_NAME, COLUM_TASK_ID};
+        Cursor cursor = getWritableDatabase().query(TABLE_TASKITENS,
+                colums, COLUM_TASK_ID + " = " + Long.toString(id), null,null,null,null);
+
+        ArrayList<Task> aLotOfTasks = new ArrayList<Task>();
+        while(cursor.moveToNext()){
+            Task task = new Task();
+            task.setId(cursor.getLong(0));
+            task.setName(cursor.getString(1));
+            task.setTaskListId(cursor.getLong(2));
+            aLotOfTasks.add(task);
+        }
+
+        return aLotOfTasks;
     }
 }

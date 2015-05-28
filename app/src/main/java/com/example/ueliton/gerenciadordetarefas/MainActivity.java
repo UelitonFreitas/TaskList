@@ -26,28 +26,6 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        taskListView = (ListView) findViewById(R.id.lista);
-
-        taskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-                TaskList tasks = (TaskList) adapter.getItemAtPosition(position);
-                Intent taskFormActivity = new Intent(MainActivity.this, TaskListForm.class);
-                taskFormActivity.putExtra("selectedTasksList", tasks);
-                startActivity(taskFormActivity);
-            }
-        });
-
-        taskListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapter, View view, int position, long id) {
-                Toast.makeText(MainActivity.this,
-                        "Clique longo: " + adapter.getItemAtPosition(position), Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });
-
     }
 
     @Override
@@ -58,11 +36,8 @@ public class MainActivity extends ActionBarActivity {
         List<TaskList> taskLists = dao.getTaskLists();
         dao.close();
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter<TaskList>(this,
-                android.R.layout.simple_list_item_1,
-                taskLists);
-        
-        taskListView.setAdapter(arrayAdapter);
+        ListAdapter arrayAdapter = new ListAdapter(this, taskLists);
+        ((ListView) findViewById(R.id.lista)).setAdapter(arrayAdapter);
     }
 
     @Override
@@ -70,7 +45,6 @@ public class MainActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
-
         return true;
     }
 
@@ -89,9 +63,7 @@ public class MainActivity extends ActionBarActivity {
                 break;
             default:
                 break;
-
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

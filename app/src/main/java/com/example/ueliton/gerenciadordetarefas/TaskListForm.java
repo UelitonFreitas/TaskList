@@ -47,16 +47,15 @@ public class TaskListForm extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                TaskList taskList = taskListFormHelper.getTasksLists();
-
-                TaskList tasks = taskListFormHelper.getTasksLists();
+                //TaskList taskList = taskListFormHelper.getTasksLists();
+                //TaskList tasks =    taskListFormHelper.getTasksLists();
                 TaskListsDAO dao = new TaskListsDAO(TaskListForm.this);
                 if (aTaskList == null) {
-                    dao.save(tasks);
+                    dao.save(aTaskList);
                 }
                 else {
-                    taskList.setId(aTaskList.getId());
-                    dao.update(taskList);
+                    //taskList.setId(aTaskList.getId());
+                    dao.update(aTaskList);
                 }
                 dao.close();
                 finish();
@@ -74,18 +73,19 @@ public class TaskListForm extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //Pega as listas de tarefas.
+
+        if (aTaskList == null) {
+            return;
+        }
 
         TaskListsDAO dao = new TaskListsDAO(this);
-        List<Task> taskLists = dao.getTaskItens();
+        List<Task> taskLists = dao.getTaskItens(aTaskList.getId());
         dao.close();
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter<Task>(this,
-                android.R.layout.simple_list_item_1,
+        TaskAdapter arrayAdapter = new TaskAdapter(this,
                 taskLists);
 
         itens.setAdapter(arrayAdapter);
-
     }
 
     @Override

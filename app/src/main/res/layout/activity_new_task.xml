@@ -26,15 +26,6 @@
         android:layout_below="@+id/taskListName"
         android:layout_above="@+id/button_save_task_list" />
 
-    Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nova Tarefa"
-        android:id="@+id/button_new_task"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/taskList"
-        android:layout_alignEnd="@+id/taskList" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

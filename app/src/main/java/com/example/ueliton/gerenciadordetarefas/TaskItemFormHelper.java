@@ -1,5 +1,6 @@
 package com.example.ueliton.gerenciadordetarefas;
 
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.example.ueliton.gerenciadordetarefas.model.Task;
@@ -9,6 +10,23 @@ import com.example.ueliton.gerenciadordetarefas.model.Task;
  */
 public class TaskItemFormHelper {
     private EditText taskTitle;
+    private CheckBox done;
+
+    public CheckBox getDone() {
+        return done;
+    }
+
+    public void setDone(CheckBox done) {
+        this.done = done;
+    }
+
+    public EditText getTaskTitle() {
+        return taskTitle;
+    }
+
+    public void setTaskTitle(EditText taskTitle) {
+        this.taskTitle = taskTitle;
+    }
 
     public TaskItemFormHelper(TaskItemForm taskItemForm) {
         taskTitle = (EditText) taskItemForm.findViewById(R.id.task_item_title);
@@ -16,5 +34,13 @@ public class TaskItemFormHelper {
 
     public Task getTask() {
         return new Task(taskTitle.getText().toString());
+    }
+
+    public void setName(String name) {
+        this.taskTitle.setText(name);
+    }
+
+    public void setDone(boolean done) {
+        this.done.setChecked(done);
     }
 }
