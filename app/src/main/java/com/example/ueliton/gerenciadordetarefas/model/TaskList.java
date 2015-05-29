@@ -14,6 +14,12 @@ public class TaskList implements Serializable{
     private List<Task> listOfTasks;
     private boolean done;
 
+    public TaskList(Long anInt, String string, boolean b) {
+        this.id = anInt;
+        this.name = string;
+        this.done = b;
+    }
+
     public void setDone(boolean done) {
         this.done = done;
     }

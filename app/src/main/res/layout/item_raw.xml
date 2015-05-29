@@ -25,4 +25,5 @@
         android:layout_toLeftOf="@+id/listCheckBox"
         android:layout_toStartOf="@+id/listCheckBox" />
 
+
 </RelativeLayout>

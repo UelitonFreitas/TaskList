@@ -31,13 +31,8 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //Pega as listas de tarefas.
-        TaskListsDAO dao = new TaskListsDAO(this);
-        List<TaskList> taskLists = dao.getTaskLists();
-        dao.close();
+        this.loadAdapter();
 
-        ListAdapter arrayAdapter = new ListAdapter(this, taskLists);
-        ((ListView) findViewById(R.id.lista)).setAdapter(arrayAdapter);
     }
 
     @Override
@@ -65,5 +60,13 @@ public class MainActivity extends ActionBarActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void loadAdapter() {
+        TaskListsDAO dao = new TaskListsDAO(this);
+        List<TaskList> taskLists = dao.getTaskLists();
+        dao.close();
+        ListAdapter arrayAdapter = new ListAdapter(this, taskLists);
+        ((ListView) findViewById(R.id.lista)).setAdapter(arrayAdapter);
     }
 }

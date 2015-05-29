@@ -11,12 +11,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ueliton.gerenciadordetarefas.dao.TaskListsDAO;
 import com.example.ueliton.gerenciadordetarefas.model.TaskList;
 
+import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,11 +32,11 @@ public class ListAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
     private List<TaskList> list;
-    private Activity activity;
+    private MainActivity activity;
     public Resources res;
     public TaskList tempValues = null;
 
-    public ListAdapter(Activity context, List<TaskList> list) {
+    public ListAdapter(MainActivity context, List<TaskList> list) {
         this.activity = context;
         this.list = list;
         this.inflater = ( LayoutInflater )activity.
@@ -102,7 +105,32 @@ public class ListAdapter extends BaseAdapter {
                     activity.startActivity(taskFormActivity);
                 }
             });
-            holder.check.setChecked(holder.taskList.getDone());
+            holder.text.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    TaskListsDAO dao = new TaskListsDAO(activity);
+                    dao.delete(holder.taskList);
+                    dao.close();
+                    activity.loadAdapter();
+                    Toast.makeText(activity, "Lista Deletada!!", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+            });
+
+            //Se todas as tarefas foram cumpridas.
+            TaskListsDAO dao = new TaskListsDAO(activity);
+            if (dao.taskIsDone(holder.taskList)) {
+                holder.check.setChecked(true);
+            }
+            holder.check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    TaskListsDAO dao = new TaskListsDAO(activity);
+                    holder.taskList.setDone(isChecked);
+                    dao.listDone(holder.taskList);
+                    dao.close();
+                }
+            });
         }
         return view;
     }

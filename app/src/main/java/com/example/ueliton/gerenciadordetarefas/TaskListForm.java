@@ -31,36 +31,29 @@ public class TaskListForm extends ActionBarActivity {
 
         itens = (ListView) findViewById(R.id.task_list_itens);
 
-        EditText taskNameEdit = (EditText) findViewById(R.id.taskListName);
-        final Button buttonSave = (Button) findViewById(R.id.button_save_task_list);
-
         taskListFormHelper = new TaskListFormHelper(TaskListForm.this);
 
         aTaskList = (TaskList) getIntent().getSerializableExtra("selectedTasksList");
 
         if (aTaskList != null){
-            buttonSave.setText("Alterar");
             taskListFormHelper.setTaskLists(aTaskList);
         }
+    }
 
-        buttonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //TaskList taskList = taskListFormHelper.getTasksLists();
-                //TaskList tasks =    taskListFormHelper.getTasksLists();
-                TaskListsDAO dao = new TaskListsDAO(TaskListForm.this);
-                if (aTaskList == null) {
-                    dao.save(aTaskList);
-                }
-                else {
-                    //taskList.setId(aTaskList.getId());
-                    dao.update(aTaskList);
-                }
-                dao.close();
-                finish();
-            }
-        });
+    @Override
+    public void onBackPressed()
+    {
+        TaskList taskList = taskListFormHelper.getTasksLists();
+        TaskListsDAO dao = new TaskListsDAO(TaskListForm.this);
+        if (aTaskList == null) {
+            dao.save(taskList);
+        }
+        else {
+            taskList.setId(aTaskList.getId());
+            dao.update(taskList);
+        }
+        dao.close();
+        super.onBackPressed();  // optional depending on your needs
     }
 
     @Override
@@ -77,14 +70,14 @@ public class TaskListForm extends ActionBarActivity {
         if (aTaskList == null) {
             return;
         }
+        loadAdapter();
+    }
 
+    public void loadAdapter() {
         TaskListsDAO dao = new TaskListsDAO(this);
         List<Task> taskLists = dao.getTaskItens(aTaskList.getId());
         dao.close();
-
-        TaskAdapter arrayAdapter = new TaskAdapter(this,
-                taskLists);
-
+        TaskAdapter arrayAdapter = new TaskAdapter(this, taskLists);
         itens.setAdapter(arrayAdapter);
     }
 
@@ -98,8 +91,20 @@ public class TaskListForm extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         switch (id){
             case R.id.new_task_list_item:
+
+                String taskName = taskListFormHelper.getEditName().getText().toString();
                 Intent newTask = new Intent(TaskListForm.this, TaskItemForm.class);
-                newTask.putExtra("tasksList", TaskListForm.this.aTaskList);
+
+                if (taskName != null) {
+                    TaskListsDAO dao = new TaskListsDAO(TaskListForm.this);
+                    dao.save(new TaskList(taskName));
+                    TaskList taskList = dao.getTaskListByName(taskName);
+                    dao.close();
+                    newTask.putExtra("tasksList", taskList);
+                }
+                else {
+                    newTask.putExtra("tasksList", TaskListForm.this.aTaskList);
+                }
                 startActivity(newTask);
             default:
                 break;

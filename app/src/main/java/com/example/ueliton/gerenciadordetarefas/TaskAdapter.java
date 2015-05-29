@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,11 +32,11 @@ public class TaskAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
     private List<Task> list;
-    private Activity activity;
+    private TaskListForm activity;
     public Resources res;
     public Task tempValues = null;
 
-    public TaskAdapter(Activity context, List<Task> list) {
+    public TaskAdapter(TaskListForm context, List<Task> list) {
         this.activity = context;
         this.list = list;
         this.inflater = ( LayoutInflater )activity.
@@ -101,20 +102,35 @@ public class TaskAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     Intent intent = activity.getIntent();
                     TaskList taskList = (TaskList) intent.getSerializableExtra("selectedTasksList");
-                    TaskListsDAO dao = new TaskListsDAO(activity);
-
-                    taskList.setId(taskList.getId());
-                    dao.update(taskList);
-
-                    dao.close();
                     intent = new Intent(activity, TaskItemForm.class);
                     intent.putExtra("tasksList", taskList);
                     intent.putExtra("task", holder.task);
                     activity.startActivity(intent);
                 }
-
             });
+
+            holder.text.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    TaskListsDAO dao = new TaskListsDAO(activity);
+                    dao.delete(holder.task);
+                    dao.close();
+                    activity.loadAdapter();
+                    Toast.makeText(activity,"Tarefa Deletada!!",Toast.LENGTH_LONG).show();
+                    return true;
+                }
+            });
+
             holder.check.setChecked(holder.task.getDone());
+            holder.check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    TaskListsDAO dao = new TaskListsDAO(activity);
+                    holder.task.setDone(isChecked);
+                    dao.update(holder.task);
+                    dao.close();
+                }
+            });
         }
         return view;
     }

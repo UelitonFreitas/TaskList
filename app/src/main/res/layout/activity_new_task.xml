@@ -23,14 +23,6 @@
         android:id="@+id/task_list_itens"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/taskListName"
-        android:layout_above="@+id/button_save_task_list" />
+        android:layout_below="@+id/taskListName"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Salvar Lista"
-        android:id="@+id/button_save_task_list"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
 </RelativeLayout>

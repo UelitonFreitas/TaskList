@@ -46,9 +46,10 @@ public class TaskItemForm extends ActionBarActivity {
                 TaskListsDAO dao = new TaskListsDAO(TaskItemForm.this);
                 taskHelper = new TaskItemFormHelper(TaskItemForm.this);
                 Task newTask = taskHelper.getTask();
-                newTask.setId(task.getId());
+
                 if (task != null){
-                    dao.update(newTask);
+                    task.setName(newTask.getName());
+                    dao.update(task);
                 }
                 else {
                     dao.save(aTaskList.getId(), newTask);
@@ -58,9 +59,9 @@ public class TaskItemForm extends ActionBarActivity {
             }
         });
 
-        TaskListsDAO dao = new TaskListsDAO(this);
-        taskItens = dao.getTaskItens(aTaskList.getId());
-        dao.close();
+        //TaskListsDAO dao = new TaskListsDAO(this);
+       // taskItens = dao.getTaskItens(aTaskList.getId());
+        //dao.close();
     }
 
     protected void onResume() {

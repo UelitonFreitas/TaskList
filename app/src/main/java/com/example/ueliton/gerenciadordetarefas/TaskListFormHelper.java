@@ -1,5 +1,6 @@
 package com.example.ueliton.gerenciadordetarefas;
 
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,7 +15,8 @@ import java.util.List;
  */
 public class TaskListFormHelper {
 
-    ListView list;
+    ListView listView;
+    List<Task> tasks;
     EditText editName;
 
     public EditText getEditName() {
@@ -23,7 +25,7 @@ public class TaskListFormHelper {
 
     public TaskListFormHelper(TaskListForm taskListForm) {
         editName = (EditText) taskListForm.findViewById(R.id.taskListName);
-        list = (ListView) taskListForm.findViewById(R.id.task_list_itens);
+        listView = (ListView) taskListForm.findViewById(R.id.task_list_itens);
     }
 
     public Task getTask() {
@@ -33,12 +35,6 @@ public class TaskListFormHelper {
     public TaskList getTasksLists(){
 
         TaskList tasks = new TaskList(this.editName.getText().toString());
-
-        for (int i = 0; i < list.getCount(); i++) {
-            TextView name = (TextView) list.getChildAt(i);
-            Task task = new Task(name.getText().toString());
-            tasks.addTask(task);
-        }
         return tasks;
     }
 

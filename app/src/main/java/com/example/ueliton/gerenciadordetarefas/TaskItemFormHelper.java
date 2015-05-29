@@ -12,6 +12,10 @@ public class TaskItemFormHelper {
     private EditText taskTitle;
     private CheckBox done;
 
+    public TaskItemFormHelper(TaskItemForm taskItemForm) {
+        taskTitle = (EditText) taskItemForm.findViewById(R.id.task_item_title);
+    }
+
     public CheckBox getDone() {
         return done;
     }
@@ -26,10 +30,6 @@ public class TaskItemFormHelper {
 
     public void setTaskTitle(EditText taskTitle) {
         this.taskTitle = taskTitle;
-    }
-
-    public TaskItemFormHelper(TaskItemForm taskItemForm) {
-        taskTitle = (EditText) taskItemForm.findViewById(R.id.task_item_title);
     }
 
     public Task getTask() {
